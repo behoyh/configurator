@@ -1,8 +1,3 @@
-/*
- * @Author: Devin
- * @Date: 2023-08-10 14:04:19
- * @Description: file content
- */
 'use strict'
 
 const path = require('path')
@@ -13,8 +8,6 @@ const TimeFixPlugin = require('time-fix-plugin')
 const WebpackBar = require('webpackbar')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-const HappyPack = require('happypack') // 多线程打包工具
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 const Dotenv = require('dotenv-webpack')
 const definePlugin = new webpack.DefinePlugin({
 'process.env.REACT_APP_GRPC_URL': JSON.stringify(process.env.REACT_APP_GRPC_URL),
@@ -42,9 +35,21 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        use: ['babel-loader'],
         exclude: /(node_modules|bower_components)/,
         include: [path.resolve(__dirname, '../src')],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: [
+              ['import', { libraryName: 'antd', style: true }],
+              ['@babel/plugin-proposal-decorators', { legacy: true }],
+              ['@babel/plugin-proposal-class-properties', { loose: true }],
+              '@babel/plugin-transform-runtime',
+            ],
+          },
+        },
       },
 
       {
@@ -79,30 +84,13 @@ module.exports = {
       profile: true,
       reporters: ['basic', 'fancy', 'profile'],
     }),
-    // new webpack.ProgressPlugin({
-    //   entries: true,
-    //   modules: true,
-    //   modulesCount: 100,
-    //   profile: true,
-    //   handler: (percentage, message, ...args) => {
-    //     // custom logic
-    //     console.info(percentage, message, ...args)
-    //   },
-    // }),
     new HardSourceWebpackPlugin(),
-    //开启 happypack 的线程池
-    new HappyPack({
-      id: 'happybabel',
-      loaders: ['babel-loader?cacheDirectory=true'],
-      threadPool: happyThreadPool,
-      verbose: true,
-    }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /dayjs$/),
   ],
   devtool: 'cheap-module-eval-source-map',
   optimization: {
-    removeAvailableModules: true, // 删除已解决的 chunk
-    removeEmptyChunks: true, // 删除空的 chunks
-    mergeDuplicateChunks: true, // 合并重复的 chunk
+    removeAvailableModules: true, 
+    removeEmptyChunks: true, 
+    mergeDuplicateChunks: true, 
   },
 }

@@ -29,7 +29,14 @@ module.exports = merge(common, {
           MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
-          'less-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
+          },
         ],
       },
       {
@@ -50,15 +57,15 @@ module.exports = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      // 这里为什么不是 '../public/index.html'?
-      // 我的理解是无论与要用的 template 是不是在一个目录，都是从根路径开始查找
       template: 'public/index.html',
-      inject: 'body',
-      // favicon: path.resolve('public/favicon.ico'),
+      inject: true,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
+        removeAttributeQuotes: true
       },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'auto'
     }),
     new PreloadWebpackPlugin({
       rel: 'prefetch',
@@ -75,7 +82,7 @@ module.exports = merge(common, {
     }),
   ],
   optimization: {
-    sideEffects: true, //配合 tree shaking
+    sideEffects: true, // tree shaking
     minimize: true,
     minimizer: [
       new TerserPlugin({
