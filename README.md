@@ -1,6 +1,6 @@
 # grpc-web-python-react
 
-This project implements sweep configuration logic and frontend. Also uses gRPC via envoy prozy for real-time progress updates.
+This project implements sweep configuration logic and frontend. Also uses gRPC via envoy proxy for real-time progress updates.
 
 # Quickstart
 > `docker compose up`
