@@ -1,4 +1,4 @@
-# grpc-web-python-react
+# sweep-configurator
 
 This project implements sweep configuration logic and frontend. Also uses gRPC via envoy proxy for real-time progress updates.
 
