@@ -3,7 +3,7 @@
 This project implements sweep configuration logic and frontend. Also uses gRPC via envoy proxy for real-time progress updates.
 
 # Quickstart
-> `docker compose up`
+> `docker compose up && open http://localhost:7891`
 
 ## Server
 
