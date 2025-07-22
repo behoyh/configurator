@@ -1,0 +1,37 @@
+version: '3.9'
+
+networks:
+  grpc-network:
+    driver: bridge
+
+services:
+  grpc-proxy:
+    container_name: grpc-proxy
+    build:
+      context: ./envoy
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5001:5001"
+    networks:
+      - grpc-network
+  grpc-server:
+    container_name: grpc-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - grpc-network
+  grpc-client:
+    container_name: grpc-client
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    restart: always
+    ports:
+      - "7891:7891"
+    networks:
+      - grpc-network

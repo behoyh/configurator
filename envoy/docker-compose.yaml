@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  grpc-proxy:
+    container_name: grpc-proxy
+    image: grpc-proxy:v1.0
+    restart: always
+    network_mode: "host"

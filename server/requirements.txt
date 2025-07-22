@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+python-multipart
+grpcio
+grpcio-tools
+pyntcloud

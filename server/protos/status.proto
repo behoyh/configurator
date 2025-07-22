@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package status;
+
+message StatusRequest {
+    string id = 1;
+}
+
+message StatusUpdate {
+    string state = 1;
+    int32 progress = 2;
+}
+
+service StatusStreamer {
+    rpc StreamStatus(StatusRequest) returns (stream StatusUpdate);
+}
